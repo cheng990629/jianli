@@ -5,11 +5,11 @@ import { Iconify, SvgIcon } from "@/components/icon";
 
 import { useSettings } from "@/store/settingStore";
 import { cn } from "@/utils";
-import type { GetProp, MenuProps } from "antd";
+import type { MenuProps } from "antd";
 import { ThemeLayout } from "#/enum";
 import type { AppRouteObject } from "#/router";
 
-type MenuItem = GetProp<MenuProps, "items">[number];
+type MenuItem = [number];
 
 const renderIcon = (icon: string | React.ReactNode): React.ReactNode => {
 	if (typeof icon !== "string") return icon;
@@ -36,16 +36,14 @@ export function useRouteToMenuFn() {
 					const { meta, children } = item;
 					if (!meta) return {} as MenuItem;
 
-					const menuItem: Partial<MenuItem> = {
+					const menuItem = {
 						key: meta.key,
 						disabled: meta.disabled,
 						label: (
 							<div
 								className={cn(
 									"inline-flex items-center overflow-hidden",
-									themeLayout === ThemeLayout.Horizontal
-										? "justify-start"
-										: "justify-between",
+									themeLayout === ThemeLayout.Horizontal ? "justify-start" : "justify-between",
 								)}
 							>
 								<div className="">{t(meta.label)}</div>
@@ -56,7 +54,7 @@ export function useRouteToMenuFn() {
 						...(children && { children: routeToMenuFn(children) }),
 					};
 
-					return menuItem as MenuItem;
+					return menuItem;
 				});
 		},
 		[t, themeLayout],
